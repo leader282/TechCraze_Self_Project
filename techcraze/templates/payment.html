@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+{% endblock extra_head %}
+
+{% block content %}
+
+  <main >
+    <div class="container wow fadeIn text-center p-5">
+      <h2 class="p-2">Stripe Payment System</h2>
+      <h5 class="p-2">Click here to proceed to pay</h5>
+      <button class="button is-primary" id="submitBtn">Purchase!</button>
+    </div>
+  </main>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="{% static 'js/payment.js' %}"></script>
+
+{% endblock content %}
