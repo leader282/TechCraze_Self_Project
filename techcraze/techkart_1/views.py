@@ -113,7 +113,6 @@ def create_checkout_session(request):
 
             # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
             order = Order.objects.get(user=request.user, ordered=False)
-            print(int(order.get_total()))
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id=request.user.id if request.user.is_authenticated else None,
                 success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
@@ -129,6 +128,11 @@ def create_checkout_session(request):
                     }
                 ]
             )
+            order_qs = Order.objects.filter(user = request.user, ordered = False)
+            if order_qs.exists():
+                order = order_qs[0]
+                for order_item in OrderItem.objects.filter(user=request.user, ordered=False):
+                    order.items.remove(order_item)
             return JsonResponse({'sessionId': checkout_session['id']})
         except Exception as e:
             return JsonResponse({'error': str(e)})
@@ -274,13 +278,9 @@ class PaymentView(View):
 
 class SuccessView(View):
     def get(self, *args, **kwargs):
-        order_qs = Order.objects.filter(user = self.request.user, ordered = False)
-        if order_qs.exists():
-            order = order_qs[0]
-            for order_item in OrderItem.objects.filter(user=self.request.user, ordered=False):
-                order.items.remove(order_item)
+        if self.request.user.is_authenticated:
             messages.success(self.request, 'Your order has been placed successfully.')
-            return(redirect('/'))
+        return(redirect('/'))
 
 class CancelledView(View):
     def get(self, *args, **kwargs):
