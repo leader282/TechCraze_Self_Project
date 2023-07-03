@@ -4,12 +4,13 @@ This repository contains the code for an e-commerce website. The website contain
 ## How to set up the project locally
 1. Clone this repository ```git clone https://github.com/leader282/TechCraze_Self_Project```
 2. Open up an editor like VS-Code
-3. Create a virtual environment ```python -m venv <enviroment_name>```
-4. Run ```pip install -r requirements.txt```
-5. Run makemigrations ```python manage.py makemigrations techkart_1``` and ```python manage.py makemigrations```
-6. Run migrate ```python manage.py migrate```
-7. Create a super-user or admin ```python manage.py createsuperuser```
-8. Set up the localhost ```python manage.py runserver```
+3. Go into the techcraze directory
+4. Create a virtual environment ```python -m venv <enviroment_name>```
+5. Run ```pip install -r requirements.txt```
+6. Run makemigrations ```python manage.py makemigrations techkart_1``` and ```python manage.py makemigrations```
+7. Run migrate ```python manage.py migrate```
+8. Create a super-user or admin ```python manage.py createsuperuser```
+9. Set up the localhost ```python manage.py runserver```
 
 Done!!
 
