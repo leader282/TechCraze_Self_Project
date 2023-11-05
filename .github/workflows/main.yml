@@ -1,0 +1,58 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        cd techcraze
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install coverage
+
+    - name: Run migrations
+      run: |
+        source venv/bin/activate
+        cd techcraze
+        python manage.py makemigrations
+        python manage.py migrate
+
+    - name: Run tests with coverage
+      run: |
+        source venv/bin/activate
+        cd techcraze
+        coverage run manage.py test
+        coverage report
+        coverage xml -o coverage.xml
+
+    - name: List coverage report file
+      run: |
+        cd techcraze
+        ls -la coverage.xml
+
+    - name: Publish coverage results to Code Climate
+      uses: paambaati/codeclimate-action@v2.7.5
+      env:
+        CC_TEST_REPORTER_ID: 7ef3d2bc9449d6917e1088701cace5983192560daf4c68cb3f49c0fef74320e1
+      with:
+        prefix: ./techcraze
+        debug: true
+        coverageLocations: |
+          ${{github.workspace}}/techcraze/coverage.xml:lcov
